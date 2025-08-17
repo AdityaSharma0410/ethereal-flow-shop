@@ -11,7 +11,11 @@ import {
   Moon,
   LogOut,
   Settings,
-  Package
+  Package,
+  Home,
+  ShoppingBag,
+  Info,
+  ShoppingCart as CartIcon
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -79,12 +83,12 @@ const Navbar: React.FC = () => {
     navigate('/');
   };
 
+  // Updated navigation items with icons and proper paths
   const navItems = [
-    { name: 'Home', path: '/' },
-    { name: 'Products', path: '/products' },
-    { name: 'Categories', path: '/categories' },
-    { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' },
+    { name: 'Home', path: '/', icon: Home },
+    { name: 'Products', path: '/products', icon: ShoppingBag },
+    { name: 'Cart', path: '/cart', icon: CartIcon },
+    { name: 'About', path: '/about', icon: Info },
   ];
 
   return (
@@ -98,14 +102,40 @@ const Navbar: React.FC = () => {
       >
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            {/* Logo */}
+            {/* Logo with 3D effect and curved edges */}
             <Link to="/" className="flex items-center space-x-2 group flex-shrink-0">
-              <motion.img
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                src={logo}
-                alt="Ethereal Cart"
-                className="h-8 w-8 float-animation"
-              />
+              <motion.div
+                whileHover={{ 
+                  scale: 1.1, 
+                  rotateY: 15,
+                  rotateX: 5,
+                  transition: { duration: 0.3 }
+                }}
+                className="relative"
+              >
+                <motion.img
+                  src={logo}
+                  alt="Ethereal Cart"
+                  className="h-10 w-10 rounded-2xl shadow-lg transform-gpu"
+                  style={{
+                    borderRadius: '1rem',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1), 0 4px 16px rgba(139, 92, 246, 0.2)',
+                    filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))',
+                  }}
+                />
+                {/* 3D glow effect */}
+                <motion.div
+                  className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 blur-sm -z-10"
+                  animate={{
+                    opacity: [0.3, 0.6, 0.3],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+              </motion.div>
               <motion.span 
                 className="text-lg font-bold text-ethereal hidden sm:block"
                 whileHover={{ scale: 1.05 }}
@@ -120,13 +150,14 @@ const Navbar: React.FC = () => {
                 <Link
                   key={item.name}
                   to={item.path}
-                  className={`relative px-2 py-1 text-sm rounded-lg transition-all duration-300 ${
+                  className={`relative px-3 py-2 text-sm rounded-lg transition-all duration-300 flex items-center space-x-2 ${
                     location.pathname === item.path
                       ? 'text-primary bg-primary/10'
                       : 'text-foreground hover:text-primary hover:bg-hover'
                   }`}
                 >
-                  {item.name}
+                  <item.icon className="w-4 h-4" />
+                  <span>{item.name}</span>
                   {location.pathname === item.path && (
                     <motion.div
                       layoutId="activeTab"
@@ -298,23 +329,40 @@ const Navbar: React.FC = () => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               </form>
 
-              {/* Mobile Navigation */}
+              {/* Mobile Navigation with Icons */}
               <div className="space-y-2">
                 {navItems.map((item) => (
                   <Link
                     key={item.name}
                     to={item.path}
-                    className={`block px-3 py-2 rounded-lg transition-colors ${
+                    className={`flex items-center space-x-3 px-3 py-3 rounded-lg transition-colors ${
                       location.pathname === item.path
                         ? 'text-primary bg-primary/10'
                         : 'text-foreground hover:text-primary hover:bg-hover'
                     }`}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    {item.name}
+                    <item.icon className="w-5 h-5" />
+                    <span className="font-medium">{item.name}</span>
                   </Link>
                 ))}
               </div>
+
+              {/* Mobile Auth Buttons */}
+              {!user && (
+                <div className="pt-4 border-t border-glass-border space-y-2">
+                  <Link to="/login" className="block">
+                    <Button variant="ghost" className="w-full btn-liquid" onClick={() => setIsMobileMenuOpen(false)}>
+                      Login
+                    </Button>
+                  </Link>
+                  <Link to="/signup" className="block">
+                    <Button className="w-full btn-ethereal" onClick={() => setIsMobileMenuOpen(false)}>
+                      Sign Up
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
