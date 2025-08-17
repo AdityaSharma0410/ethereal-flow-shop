@@ -297,7 +297,7 @@ const Navbar: React.FC = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                className="xl:hidden btn-liquid w-9 h-9 p-0"
+                className="lg:hidden btn-liquid w-9 h-9 p-0"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
                 {isMobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
@@ -307,6 +307,19 @@ const Navbar: React.FC = () => {
         </div>
       </motion.nav>
 
+      {/* Mobile Menu Backdrop */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 lg:hidden"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
       {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
@@ -314,43 +327,53 @@ const Navbar: React.FC = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-20 left-4 right-4 z-40 glass-card-strong rounded-2xl backdrop-blur-ethereal lg:hidden"
+            className="fixed top-20 left-4 right-4 z-40 glass-card-strong rounded-2xl backdrop-blur-ethereal shadow-lg border border-glass-border lg:hidden"
           >
             <div className="p-6 space-y-4">
               {/* Mobile Search */}
               <form onSubmit={handleSearchSubmit} className="relative">
                 <Input
                   type="text"
-                  placeholder="Search..."
+                  placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => handleSearch(e.target.value)}
-                  className="pl-10 glass-card border-glass-border"
+                  className="pl-10 glass-card border-glass-border bg-glass/50"
                 />
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               </form>
 
               {/* Mobile Navigation with Icons */}
-              <div className="space-y-2">
+              <div className="space-y-3">
+                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-2">Navigation</h3>
                 {navItems.map((item) => (
                   <Link
                     key={item.name}
                     to={item.path}
-                    className={`flex items-center space-x-3 px-3 py-3 rounded-lg transition-colors ${
+                    className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 hover:scale-105 ${
                       location.pathname === item.path
-                        ? 'text-primary bg-primary/10'
+                        ? 'text-primary bg-primary/10 border border-primary/20'
                         : 'text-foreground hover:text-primary hover:bg-hover'
                     }`}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <item.icon className="w-5 h-5" />
+                    <item.icon className="w-5 h-5 flex-shrink-0" />
                     <span className="font-medium">{item.name}</span>
+                    {location.pathname === item.path && (
+                      <motion.div
+                        layoutId="mobileActiveTab"
+                        className="ml-auto w-2 h-2 bg-primary rounded-full"
+                        initial={false}
+                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                      />
+                    )}
                   </Link>
                 ))}
               </div>
 
               {/* Mobile Auth Buttons */}
               {!user && (
-                <div className="pt-4 border-t border-glass-border space-y-2">
+                <div className="pt-4 border-t border-glass-border space-y-3">
+                  <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-2">Account</h3>
                   <Link to="/login" className="block">
                     <Button variant="ghost" className="w-full btn-liquid" onClick={() => setIsMobileMenuOpen(false)}>
                       Login
@@ -361,6 +384,31 @@ const Navbar: React.FC = () => {
                       Sign Up
                     </Button>
                   </Link>
+                </div>
+              )}
+
+              {/* User Menu for Mobile */}
+              {user && (
+                <div className="pt-4 border-t border-glass-border space-y-3">
+                  <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-2">Account</h3>
+                  <Link to="/profile" className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-hover transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                    <User className="w-5 h-5" />
+                    <span>Profile</span>
+                  </Link>
+                  <Link to="/orders" className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-hover transition-colors" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Package className="w-5 h-5" />
+                    <span>Orders</span>
+                  </Link>
+                  <button 
+                    onClick={() => {
+                      handleLogout();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-destructive/10 text-destructive transition-colors w-full text-left"
+                  >
+                    <LogOut className="w-5 h-5" />
+                    <span>Logout</span>
+                  </button>
                 </div>
               )}
             </div>

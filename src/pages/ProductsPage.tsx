@@ -34,6 +34,7 @@ import {
 } from '@/components/ui/sheet';
 import { MockAPI } from '@/services/api';
 import { Product, Category } from '@/types/product';
+import { useAnimatedList } from '@/hooks/use-scroll-animation';
 import toast from 'react-hot-toast';
 
 const ProductsPage: React.FC = () => {
@@ -42,6 +43,7 @@ const ProductsPage: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const animatedList = useAnimatedList(0.08);
   
   // Filters
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
@@ -419,6 +421,11 @@ const ProductsPage: React.FC = () => {
             <AnimatePresence mode="popLayout">
               {products.length > 0 ? (
                 <motion.div
+                  ref={animatedList.containerRef}
+                  variants={animatedList.containerVariants}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
                   layout
                   className={`grid gap-6 ${
                     viewMode === 'grid'
@@ -427,7 +434,14 @@ const ProductsPage: React.FC = () => {
                   }`}
                 >
                   {products.map((product) => (
-                    <ProductCard key={product.id} product={product} />
+                    <motion.div
+                      key={product.id}
+                      variants={animatedList.itemVariants}
+                      whileHover="hover"
+                      layout
+                    >
+                      <ProductCard product={product} />
+                    </motion.div>
                   ))}
                 </motion.div>
               ) : (

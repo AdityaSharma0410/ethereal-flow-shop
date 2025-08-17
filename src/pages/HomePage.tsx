@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { MockAPI } from '@/services/api';
 import { Product, Category, Testimonial } from '@/types/product';
+import { useAnimatedList } from '@/hooks/use-scroll-animation';
 import heroBackground from '@/assets/hero-bg.jpg';
 
 const HomePage: React.FC = () => {
@@ -46,20 +47,7 @@ const HomePage: React.FC = () => {
     setEmail('');
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
-  };
+  const animatedList = useAnimatedList(0.1);
 
   if (loading) {
     return (
@@ -168,29 +156,35 @@ const HomePage: React.FC = () => {
       <section className="py-20 px-4">
         <div className="container mx-auto">
           <motion.div
-            variants={containerVariants}
+            ref={animatedList.containerRef}
+            variants={animatedList.containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-bold mb-4 text-ethereal">
+            <motion.h2 variants={animatedList.itemVariants} className="text-4xl md:text-5xl font-bold mb-4 text-ethereal">
               Featured Treasures
             </motion.h2>
-            <motion.p variants={itemVariants} className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <motion.p variants={animatedList.itemVariants} className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Discover our handpicked collection of extraordinary products that embody ethereal beauty and exceptional quality.
             </motion.p>
           </motion.div>
 
           <motion.div
-            variants={containerVariants}
+            ref={animatedList.containerRef}
+            variants={animatedList.containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {featuredProducts.map((product, index) => (
-              <motion.div key={product.id} variants={itemVariants}>
+              <motion.div 
+                key={product.id} 
+                variants={animatedList.itemVariants}
+                whileHover="hover"
+              >
                 <Card className="glass-card hover:shadow-ethereal transition-all duration-500 group overflow-hidden">
                   <div className="relative overflow-hidden">
                     <img
@@ -269,32 +263,38 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Categories */}
-      <section className="py-20 px-4 bg-gradient-liquid">
+      <section className="py-20 px-4">
         <div className="container mx-auto">
           <motion.div
-            variants={containerVariants}
+            ref={animatedList.containerRef}
+            variants={animatedList.containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-bold mb-4 text-ethereal">
+            <motion.h2 variants={animatedList.itemVariants} className="text-4xl md:text-5xl font-bold mb-4 text-ethereal">
               Explore Categories
             </motion.h2>
-            <motion.p variants={itemVariants} className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <motion.p variants={animatedList.itemVariants} className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Dive into our carefully curated categories, each offering unique treasures waiting to be discovered.
             </motion.p>
           </motion.div>
 
           <motion.div
-            variants={containerVariants}
+            ref={animatedList.containerRef}
+            variants={animatedList.containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {categories.map((category, index) => (
-              <motion.div key={category.id} variants={itemVariants}>
+              <motion.div 
+                key={category.id} 
+                variants={animatedList.itemVariants}
+                whileHover="hover"
+              >
                 <Link to={`/products?category=${category.slug}`}>
                   <Card className="glass-card hover:shadow-ethereal transition-all duration-500 group h-full">
                     <div className="relative overflow-hidden h-48">
@@ -325,22 +325,24 @@ const HomePage: React.FC = () => {
       <section className="py-20 px-4">
         <div className="container mx-auto">
           <motion.div
-            variants={containerVariants}
+            ref={animatedList.containerRef}
+            variants={animatedList.containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-bold mb-4 text-ethereal">
+            <motion.h2 variants={animatedList.itemVariants} className="text-4xl md:text-5xl font-bold mb-4 text-ethereal">
               Why Choose Ethereal Cart
             </motion.h2>
-            <motion.p variants={itemVariants} className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <motion.p variants={animatedList.itemVariants} className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Experience shopping like never before with our commitment to excellence and otherworldly customer service.
             </motion.p>
           </motion.div>
 
           <motion.div
-            variants={containerVariants}
+            ref={animatedList.containerRef}
+            variants={animatedList.containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
@@ -368,7 +370,11 @@ const HomePage: React.FC = () => {
                 description: 'Our customer service team is always available across all dimensions and time zones.'
               }
             ].map((feature, index) => (
-              <motion.div key={index} variants={itemVariants}>
+              <motion.div 
+                key={index} 
+                variants={animatedList.itemVariants}
+                whileHover="hover"
+              >
                 <Card className="glass-card text-center h-full p-8 hover:shadow-ethereal transition-all duration-500">
                   <motion.div
                     whileHover={{ scale: 1.1, rotate: 5 }}
@@ -386,32 +392,38 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 px-4 bg-gradient-liquid">
+      <section className="py-20 px-4">
         <div className="container mx-auto">
           <motion.div
-            variants={containerVariants}
+            ref={animatedList.containerRef}
+            variants={animatedList.containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl font-bold mb-4 text-ethereal">
+            <motion.h2 variants={animatedList.itemVariants} className="text-4xl md:text-5xl font-bold mb-4 text-ethereal">
               Customer Stories
             </motion.h2>
-            <motion.p variants={itemVariants} className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <motion.p variants={animatedList.itemVariants} className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Hear from our community of satisfied customers who have experienced the magic of Ethereal Cart.
             </motion.p>
           </motion.div>
 
           <motion.div
-            variants={containerVariants}
+            ref={animatedList.containerRef}
+            variants={animatedList.containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {testimonials.slice(0, 6).map((testimonial, index) => (
-              <motion.div key={testimonial.id} variants={itemVariants}>
+              <motion.div 
+                key={testimonial.id} 
+                variants={animatedList.itemVariants}
+                whileHover="hover"
+              >
                 <Card className="glass-card h-full p-6 hover:shadow-ethereal transition-all duration-500">
                   <div className="flex items-center mb-4">
                     <img

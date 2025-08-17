@@ -9,14 +9,14 @@ All colors MUST be HSL. Glassmorphic tokens for ethereal aesthetics.
 @layer base {
   :root {
     /* Core Background & Foreground */
-    --background: 240 100% 99%;
+    --background: 240 100% 95%;
     --foreground: 240 10% 15%;
 
     /* Glassmorphic Card System */
-    --card: 240 100% 99% / 0.1;
+    --card: 240 100% 95% / 0.1;
     --card-foreground: 240 10% 15%;
-    --glass: 240 100% 99% / 0.05;
-    --glass-border: 240 50% 90% / 0.2;
+    --glass: 240 100% 95% / 0.05;
+    --glass-border: 240 50% 85% / 0.2;
 
     /* Ethereal Primary Colors */
     --primary: 248 100% 70%;
@@ -25,14 +25,14 @@ All colors MUST be HSL. Glassmorphic tokens for ethereal aesthetics.
     --primary-ethereal: 248 100% 95% / 0.3;
 
     /* Liquid Secondary Colors */
-    --secondary: 210 100% 95% / 0.8;
+    --secondary: 210 100% 92% / 0.8;
     --secondary-foreground: 240 10% 15%;
     --secondary-glow: 210 100% 85% / 0.6;
 
     /* Muted Glassmorphic Elements */
-    --muted: 240 20% 96% / 0.6;
+    --muted: 240 20% 93% / 0.6;
     --muted-foreground: 240 10% 45%;
-    --muted-glass: 240 30% 98% / 0.4;
+    --muted-glass: 240 30% 95% / 0.4;
 
     /* Ethereal Accent Colors */
     --accent: 280 100% 85% / 0.7;
@@ -56,9 +56,9 @@ All colors MUST be HSL. Glassmorphic tokens for ethereal aesthetics.
 
     /* Gradients */
     --gradient-ethereal: linear-gradient(135deg, hsl(248 100% 75% / 0.3), hsl(280 100% 80% / 0.2));
-    --gradient-liquid: linear-gradient(180deg, hsl(240 100% 98% / 0.1), hsl(248 100% 95% / 0.05));
+    --gradient-liquid: linear-gradient(180deg, hsl(240 100% 94% / 0.1), hsl(248 100% 92% / 0.05));
     --gradient-hero: linear-gradient(135deg, hsl(248 100% 70% / 0.8), hsl(280 100% 75% / 0.6));
-    --gradient-card: linear-gradient(145deg, hsl(240 50% 98% / 0.1), hsl(248 30% 95% / 0.05));
+    --gradient-card: linear-gradient(145deg, hsl(240 50% 95% / 0.1), hsl(248 30% 92% / 0.05));
 
     /* Shadows & Glows */
     --shadow-glass: 0 8px 32px hsl(240 30% 70% / 0.1);
@@ -73,19 +73,19 @@ All colors MUST be HSL. Glassmorphic tokens for ethereal aesthetics.
 
     --radius: 1rem;
 
-    --sidebar-background: 0 0% 98%;
+    --sidebar-background: 0 0% 95%;
 
     --sidebar-foreground: 240 5.3% 26.1%;
 
     --sidebar-primary: 240 5.9% 10%;
 
-    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-primary-foreground: 0 0% 95%;
 
-    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent: 240 4.8% 92%;
 
     --sidebar-accent-foreground: 240 5.9% 10%;
 
-    --sidebar-border: 220 13% 91%;
+    --sidebar-border: 220 13% 88%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
@@ -173,9 +173,20 @@ All colors MUST be HSL. Glassmorphic tokens for ethereal aesthetics.
   /* Glass Card Base */
   .glass-card {
     @apply backdrop-blur-xl border border-opacity-20;
-    background: hsl(var(--glass));
+    background: hsl(var(--glass) / 0.9);
     border-color: hsl(var(--glass-border));
     box-shadow: var(--shadow-glass);
+    position: relative;
+    z-index: 1;
+  }
+
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, hsl(var(--background) / 0.95), hsl(var(--background) / 0.85));
+    border-radius: inherit;
+    z-index: -1;
   }
 
   .glass-card-strong {
