@@ -2,41 +2,76 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* Ethereal Cart Design System - Glassmorphism & Liquid Animations
+All colors MUST be HSL. Glassmorphic tokens for ethereal aesthetics.
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core Background & Foreground */
+    --background: 240 100% 99%;
+    --foreground: 240 10% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Glassmorphic Card System */
+    --card: 240 100% 99% / 0.1;
+    --card-foreground: 240 10% 15%;
+    --glass: 240 100% 99% / 0.05;
+    --glass-border: 240 50% 90% / 0.2;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Ethereal Primary Colors */
+    --primary: 248 100% 70%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 248 100% 85%;
+    --primary-ethereal: 248 100% 95% / 0.3;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Liquid Secondary Colors */
+    --secondary: 210 100% 95% / 0.8;
+    --secondary-foreground: 240 10% 15%;
+    --secondary-glow: 210 100% 85% / 0.6;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Muted Glassmorphic Elements */
+    --muted: 240 20% 96% / 0.6;
+    --muted-foreground: 240 10% 45%;
+    --muted-glass: 240 30% 98% / 0.4;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Ethereal Accent Colors */
+    --accent: 280 100% 85% / 0.7;
+    --accent-foreground: 280 20% 20%;
+    --accent-glow: 280 100% 90% / 0.5;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Interactive States */
+    --hover: 248 100% 75% / 0.2;
+    --active: 248 100% 65% / 0.3;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Status Colors */
+    --destructive: 0 100% 67%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 142 100% 45%;
+    --warning: 45 100% 55%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Borders & Inputs */
+    --border: 240 30% 90% / 0.3;
+    --input: 240 30% 95% / 0.5;
+    --ring: 248 100% 70% / 0.4;
 
-    --radius: 0.5rem;
+    /* Gradients */
+    --gradient-ethereal: linear-gradient(135deg, hsl(248 100% 75% / 0.3), hsl(280 100% 80% / 0.2));
+    --gradient-liquid: linear-gradient(180deg, hsl(240 100% 98% / 0.1), hsl(248 100% 95% / 0.05));
+    --gradient-hero: linear-gradient(135deg, hsl(248 100% 70% / 0.8), hsl(280 100% 75% / 0.6));
+    --gradient-card: linear-gradient(145deg, hsl(240 50% 98% / 0.1), hsl(248 30% 95% / 0.05));
+
+    /* Shadows & Glows */
+    --shadow-glass: 0 8px 32px hsl(240 30% 70% / 0.1);
+    --shadow-ethereal: 0 15px 35px hsl(248 100% 70% / 0.2);
+    --shadow-liquid: 0 20px 40px hsl(240 30% 50% / 0.15);
+    --glow-primary: 0 0 20px hsl(248 100% 80% / 0.6);
+    --glow-accent: 0 0 25px hsl(280 100% 85% / 0.4);
+
+    /* Animation Properties */
+    --transition-ethereal: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    --transition-liquid: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    --radius: 1rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -56,33 +91,58 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Dark Mode Ethereal Tokens */
+    --background: 240 15% 8%;
+    --foreground: 240 30% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    /* Dark Glassmorphic Cards */
+    --card: 240 20% 10% / 0.6;
+    --card-foreground: 240 30% 95%;
+    --glass: 240 20% 15% / 0.3;
+    --glass-border: 240 40% 30% / 0.3;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    /* Dark Primary Colors */
+    --primary: 248 100% 75%;
+    --primary-foreground: 240 15% 8%;
+    --primary-glow: 248 100% 85%;
+    --primary-ethereal: 248 100% 80% / 0.2;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    /* Dark Secondary */
+    --secondary: 240 20% 15% / 0.9;
+    --secondary-foreground: 240 30% 95%;
+    --secondary-glow: 240 40% 40% / 0.6;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    /* Dark Muted */
+    --muted: 240 15% 12% / 0.8;
+    --muted-foreground: 240 20% 70%;
+    --muted-glass: 240 20% 20% / 0.4;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    /* Dark Accent */
+    --accent: 280 100% 80% / 0.8;
+    --accent-foreground: 240 15% 8%;
+    --accent-glow: 280 100% 85% / 0.3;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    /* Dark Interactive States */
+    --hover: 248 100% 70% / 0.3;
+    --active: 248 100% 65% / 0.4;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    /* Dark Borders & Inputs */
+    --border: 240 20% 20% / 0.4;
+    --input: 240 20% 15% / 0.7;
+    --ring: 248 100% 75% / 0.5;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    /* Dark Gradients */
+    --gradient-ethereal: linear-gradient(135deg, hsl(248 100% 60% / 0.4), hsl(280 100% 65% / 0.3));
+    --gradient-liquid: linear-gradient(180deg, hsl(240 20% 12% / 0.6), hsl(248 30% 10% / 0.3));
+    --gradient-hero: linear-gradient(135deg, hsl(248 100% 60% / 0.9), hsl(280 100% 65% / 0.7));
+    --gradient-card: linear-gradient(145deg, hsl(240 20% 15% / 0.6), hsl(248 20% 12% / 0.4));
+
+    /* Dark Shadows & Glows */
+    --shadow-glass: 0 8px 32px hsl(240 50% 5% / 0.4);
+    --shadow-ethereal: 0 15px 35px hsl(248 100% 50% / 0.3);
+    --shadow-liquid: 0 20px 40px hsl(240 50% 5% / 0.6);
+    --glow-primary: 0 0 30px hsl(248 100% 70% / 0.8);
+    --glow-accent: 0 0 25px hsl(280 100% 75% / 0.6);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -101,5 +161,149 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    background: linear-gradient(135deg, 
+      hsl(var(--background)) 0%, 
+      hsl(var(--background)) 100%
+    );
+  }
+}
+
+/* Glassmorphism & Liquid Animation Components */
+@layer components {
+  /* Glass Card Base */
+  .glass-card {
+    @apply backdrop-blur-xl border border-opacity-20;
+    background: hsl(var(--glass));
+    border-color: hsl(var(--glass-border));
+    box-shadow: var(--shadow-glass);
+  }
+
+  .glass-card-strong {
+    @apply backdrop-blur-2xl;
+    background: hsl(var(--card));
+    border-color: hsl(var(--glass-border));
+    box-shadow: var(--shadow-glass), inset 0 1px 0 hsl(240 100% 100% / 0.1);
+  }
+
+  /* Ethereal Buttons */
+  .btn-ethereal {
+    @apply relative overflow-hidden;
+    background: var(--gradient-ethereal);
+    box-shadow: var(--shadow-ethereal);
+    transition: var(--transition-ethereal);
+  }
+
+  .btn-ethereal:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-ethereal), var(--glow-primary);
+  }
+
+  .btn-liquid {
+    @apply relative overflow-hidden;
+    transition: var(--transition-liquid);
+  }
+
+  .btn-liquid::before {
+    @apply absolute inset-0 opacity-0 transition-opacity duration-500;
+    content: '';
+    background: var(--gradient-hero);
+    border-radius: inherit;
+  }
+
+  .btn-liquid:hover::before {
+    @apply opacity-100;
+  }
+
+  /* Ripple Effect */
+  .ripple-effect {
+    @apply relative overflow-hidden;
+  }
+
+  .ripple-effect::after {
+    @apply absolute rounded-full;
+    content: '';
+    width: 0;
+    height: 0;
+    background: hsl(var(--primary) / 0.3);
+    transition: width 0.6s, height 0.6s;
+  }
+
+  .ripple-effect:active::after {
+    width: 300px;
+    height: 300px;
+  }
+
+  /* Floating Animation */
+  .float-animation {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .float-animation:nth-child(2n) {
+    animation-delay: -2s;
+  }
+
+  .float-animation:nth-child(3n) {
+    animation-delay: -4s;
+  }
+
+  /* Pulse Glow */
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+  }
+
+  /* Ethereal Text Gradient */
+  .text-ethereal {
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
+/* Animation Keyframes */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-20px) rotate(1deg); }
+  66% { transform: translateY(-10px) rotate(-1deg); }
+}
+
+@keyframes pulse-glow {
+  from { box-shadow: var(--glow-primary); }
+  to { box-shadow: var(--glow-primary), var(--glow-accent); }
+}
+
+@keyframes liquid-morph {
+  0%, 100% { border-radius: 1rem 2rem 1rem 2rem; }
+  25% { border-radius: 2rem 1rem 2rem 1rem; }
+  50% { border-radius: 1rem 1rem 2rem 2rem; }
+  75% { border-radius: 2rem 2rem 1rem 1rem; }
+}
+
+@keyframes ethereal-slide {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px) scale(0.95);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes particle-float {
+  0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.6; }
+  25% { transform: translateY(-30px) translateX(10px); opacity: 1; }
+  50% { transform: translateY(-20px) translateX(-10px); opacity: 0.8; }
+  75% { transform: translateY(-40px) translateX(5px); opacity: 1; }
+}
+
+/* Backdrop Blur Utilities */
+@layer utilities {
+  .backdrop-blur-glass {
+    backdrop-filter: blur(16px) saturate(180%);
+  }
+  
+  .backdrop-blur-ethereal {
+    backdrop-filter: blur(20px) saturate(200%) brightness(110%);
   }
 }
