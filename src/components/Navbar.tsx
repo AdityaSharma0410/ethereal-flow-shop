@@ -96,31 +96,31 @@ const Navbar: React.FC = () => {
         transition={{ duration: 0.6, ease: 'easeOut' }}
         className="fixed top-4 left-4 right-4 z-50 glass-card-strong rounded-2xl backdrop-blur-ethereal"
       >
-        <div className="container mx-auto px-6 py-4">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link to="/" className="flex items-center space-x-3 group">
+            <Link to="/" className="flex items-center space-x-2 group flex-shrink-0">
               <motion.img
                 whileHover={{ scale: 1.1, rotate: 5 }}
                 src={logo}
                 alt="Ethereal Cart"
-                className="h-10 w-10 float-animation"
+                className="h-8 w-8 float-animation"
               />
               <motion.span 
-                className="text-xl font-bold text-ethereal hidden sm:block"
+                className="text-lg font-bold text-ethereal hidden sm:block"
                 whileHover={{ scale: 1.05 }}
               >
                 Ethereal Cart
               </motion.span>
             </Link>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-8">
+            {/* Desktop Navigation - Only show on xl screens */}
+            <div className="hidden xl:flex items-center space-x-4">
               {navItems.map((item) => (
                 <Link
                   key={item.name}
                   to={item.path}
-                  className={`relative px-3 py-2 rounded-lg transition-all duration-300 ${
+                  className={`relative px-2 py-1 text-sm rounded-lg transition-all duration-300 ${
                     location.pathname === item.path
                       ? 'text-primary bg-primary/10'
                       : 'text-foreground hover:text-primary hover:bg-hover'
@@ -139,15 +139,15 @@ const Navbar: React.FC = () => {
               ))}
             </div>
 
-            {/* Search Bar */}
-            <div className="hidden md:block relative">
+            {/* Search Bar - Responsive width */}
+            <div className="hidden md:block relative flex-1 max-w-sm mx-4">
               <form onSubmit={handleSearchSubmit} className="relative">
                 <Input
                   type="text"
-                  placeholder="Search ethereal treasures..."
+                  placeholder="Search..."
                   value={searchQuery}
                   onChange={(e) => handleSearch(e.target.value)}
-                  className="w-80 pl-10 glass-card border-glass-border bg-glass/50 focus:bg-glass focus:ring-primary/50"
+                  className="w-full pl-10 glass-card border-glass-border bg-glass/50 focus:bg-glass focus:ring-primary/50"
                 />
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               </form>
@@ -171,7 +171,7 @@ const Navbar: React.FC = () => {
                         <img
                           src={product.images[0]}
                           alt={product.name}
-                          className="w-12 h-12 rounded-lg object-cover mr-3"
+                          className="w-10 h-10 rounded-lg object-cover mr-3"
                         />
                         <div>
                           <p className="font-medium text-sm">{product.name}</p>
@@ -185,13 +185,13 @@ const Navbar: React.FC = () => {
             </div>
 
             {/* Right Side Actions */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2 flex-shrink-0">
               {/* Theme Toggle */}
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={toggleTheme}
-                className="btn-liquid w-10 h-10 p-0"
+                className="btn-liquid w-9 h-9 p-0"
               >
                 <motion.div
                   whileHover={{ rotate: 180 }}
@@ -203,10 +203,10 @@ const Navbar: React.FC = () => {
 
               {/* Cart */}
               <Link to="/cart">
-                <Button variant="ghost" size="sm" className="relative btn-liquid">
-                  <ShoppingCart className="w-5 h-5" />
+                <Button variant="ghost" size="sm" className="relative btn-liquid w-9 h-9 p-0">
+                  <ShoppingCart className="w-4 h-4" />
                   {cartItemCount > 0 && (
-                    <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 bg-primary text-primary-foreground text-xs pulse-glow">
+                    <Badge className="absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center p-0 bg-primary text-primary-foreground text-xs pulse-glow">
                       {cartItemCount}
                     </Badge>
                   )}
@@ -217,8 +217,8 @@ const Navbar: React.FC = () => {
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="btn-liquid">
-                      <User className="w-5 h-5" />
+                    <Button variant="ghost" size="sm" className="btn-liquid w-9 h-9 p-0">
+                      <User className="w-4 h-4" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="glass-card-strong border-glass-border" align="end">
@@ -248,14 +248,14 @@ const Navbar: React.FC = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <div className="flex items-center space-x-2">
+                <div className="hidden sm:flex items-center space-x-1">
                   <Link to="/login">
-                    <Button variant="ghost" size="sm" className="btn-liquid">
+                    <Button variant="ghost" size="sm" className="btn-liquid text-sm px-3">
                       Login
                     </Button>
                   </Link>
                   <Link to="/signup">
-                    <Button size="sm" className="btn-ethereal">
+                    <Button size="sm" className="btn-ethereal text-sm px-3">
                       Sign Up
                     </Button>
                   </Link>
@@ -266,10 +266,10 @@ const Navbar: React.FC = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                className="lg:hidden btn-liquid"
+                className="xl:hidden btn-liquid w-9 h-9 p-0"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
-                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                {isMobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
               </Button>
             </div>
           </div>
