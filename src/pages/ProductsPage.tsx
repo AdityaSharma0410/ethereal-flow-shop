@@ -45,7 +45,7 @@ const ProductsPage: React.FC = () => {
   
   // Filters
   const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
-  const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '');
+  const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'all');
   const [priceRange, setPriceRange] = useState([0, 500]);
   const [inStockOnly, setInStockOnly] = useState(false);
   const [sortBy, setSortBy] = useState('featured');
@@ -71,7 +71,7 @@ const ProductsPage: React.FC = () => {
     setLoading(true);
     try {
       const filters = {
-        category: selectedCategory || undefined,
+        category: selectedCategory !== 'all' ? selectedCategory : undefined,
         search: searchQuery || undefined,
         minPrice: priceRange[0],
         maxPrice: priceRange[1],
@@ -129,13 +129,13 @@ const ProductsPage: React.FC = () => {
   const handleFilterChange = () => {
     const params = new URLSearchParams();
     if (searchQuery) params.set('search', searchQuery);
-    if (selectedCategory) params.set('category', selectedCategory);
+    if (selectedCategory && selectedCategory !== 'all') params.set('category', selectedCategory);
     setSearchParams(params);
   };
 
   const clearFilters = () => {
     setSearchQuery('');
-    setSelectedCategory('');
+    setSelectedCategory('all');
     setPriceRange([0, 500]);
     setInStockOnly(false);
     setSortBy('featured');
@@ -168,7 +168,7 @@ const ProductsPage: React.FC = () => {
             <SelectValue placeholder="All Categories" />
           </SelectTrigger>
           <SelectContent className="glass-card-strong border-glass-border">
-            <SelectItem value="">All Categories</SelectItem>
+            <SelectItem value="all">All Categories</SelectItem>
             {categories.map((category) => (
               <SelectItem key={category.id} value={category.slug}>
                 {category.name}
@@ -330,7 +330,7 @@ const ProductsPage: React.FC = () => {
           className="mb-8"
         >
           <h1 className="text-4xl font-bold mb-4 text-ethereal">
-            {selectedCategory 
+            {selectedCategory && selectedCategory !== 'all'
               ? `${categories.find(c => c.slug === selectedCategory)?.name || 'Category'} Products`
               : searchQuery 
                 ? `Search Results for "${searchQuery}"`
