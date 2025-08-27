@@ -2,8 +2,8 @@ import axios from 'axios';
 import { Product, Category, User, Order, CartItem } from '@/types/product';
 import { products, categories, testimonials } from '@/data/sampleData';
 
-// Mock API base URL - in production this would be your Spring Boot backend
-const API_BASE_URL = 'http://localhost:8080/api';
+// API base URL - configurable for Spring Boot backend
+const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:8080/api';
 
 // Create axios instance with default config
 export const api = axios.create({

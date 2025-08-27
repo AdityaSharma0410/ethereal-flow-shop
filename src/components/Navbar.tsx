@@ -15,6 +15,7 @@ import {
   Home,
   ShoppingBag,
   Info,
+  Shield,
   ShoppingCart as CartIcon
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -89,6 +90,7 @@ const Navbar: React.FC = () => {
     { name: 'Products', path: '/products', icon: ShoppingBag },
     { name: 'Cart', path: '/cart', icon: CartIcon },
     { name: 'About', path: '/about', icon: Info },
+    { name: 'Admin', path: '/admin', icon: Shield },
   ];
 
   return (
