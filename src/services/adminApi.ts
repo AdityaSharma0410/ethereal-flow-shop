@@ -105,7 +105,6 @@ export const AdminAPI = {
   // Developer Tools
   apiConsole: (req: ApiConsoleRequest) => {
     const method = req.method.toLowerCase() as 'get' | 'post' | 'put' | 'delete';
-    // @ts-expect-error indexed access on axios instance by method
     return api[method](req.path, ['post','put','delete'].includes(method) ? req.body : { params: req.body }).then((r:any) => r.data);
   },
   setFeatureToggle: (req: FeatureToggleRequest) => api.post<void>('/admin/dev/features', req).then(r => r.data),

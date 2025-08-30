@@ -59,7 +59,7 @@ const DynamicBackground = () => {
               radial-gradient(circle at ${secondaryGradientX}% ${secondaryGradientY}%, 
                 hsl(280 100% 75% / 0.4) 0%, 
                 transparent 50%),
-              radial-gradient(circle at ${gradientCenterX * 0.7}% ${gradientCenterY * 0.7}%, 
+              radial-gradient(circle at 35% 35%, 
                 hsl(248 100% 60% / 0.3) 0%, 
                 transparent 70%),
               linear-gradient(135deg, 

@@ -40,7 +40,7 @@ export const useScrollAnimation = (direction: 'left' | 'right' | 'up' | 'down' =
     transition: {
       duration: 0.8,
       delay,
-      ease: [0.25, 0.46, 0.45, 0.94],
+      ease: "easeOut",
     },
   };
 };
@@ -191,20 +191,12 @@ export const useAnimatedList = (staggerDelay: number = 0.08) => {
         y: 0, 
         scale: 1,
         rotateX: 0,
-        filter: 'blur(0px)',
-        transition: {
-          duration: 0.6,
-          ease: [0.25, 0.46, 0.45, 0.94],
-        }
+        filter: 'blur(0px)'
       },
       hover: {
         y: -8,
         scale: 1.02,
-        rotateX: 2,
-        transition: {
-          duration: 0.3,
-          ease: "easeOut",
-        }
+        rotateX: 2
       }
     },
     isInView,
