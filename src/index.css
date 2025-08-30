@@ -91,58 +91,58 @@ All colors MUST be HSL. Glassmorphic tokens for ethereal aesthetics.
   }
 
   .dark {
-    /* Dark Mode Ethereal Tokens */
-    --background: 240 15% 8%;
-    --foreground: 240 30% 95%;
+    /* Optimized Dark Mode - Better contrast & readability */
+    --background: 240 18% 6%;
+    --foreground: 240 25% 92%;
 
-    /* Dark Glassmorphic Cards */
-    --card: 240 20% 10% / 0.6;
-    --card-foreground: 240 30% 95%;
-    --glass: 240 20% 15% / 0.3;
-    --glass-border: 240 40% 30% / 0.3;
+    /* Enhanced Glassmorphic Cards */
+    --card: 240 22% 9% / 0.8;
+    --card-foreground: 240 25% 92%;
+    --glass: 240 25% 12% / 0.4;
+    --glass-border: 240 35% 25% / 0.4;
 
-    /* Dark Primary Colors */
-    --primary: 248 100% 75%;
-    --primary-foreground: 240 15% 8%;
-    --primary-glow: 248 100% 85%;
-    --primary-ethereal: 248 100% 80% / 0.2;
+    /* Refined Primary Colors - Softer glow */
+    --primary: 248 85% 68%;
+    --primary-foreground: 240 18% 6%;
+    --primary-glow: 248 75% 75%;
+    --primary-ethereal: 248 85% 70% / 0.25;
 
-    /* Dark Secondary */
-    --secondary: 240 20% 15% / 0.9;
-    --secondary-foreground: 240 30% 95%;
-    --secondary-glow: 240 40% 40% / 0.6;
+    /* Improved Secondary */
+    --secondary: 240 25% 12% / 0.9;
+    --secondary-foreground: 240 20% 88%;
+    --secondary-glow: 240 30% 35% / 0.5;
 
-    /* Dark Muted */
-    --muted: 240 15% 12% / 0.8;
-    --muted-foreground: 240 20% 70%;
-    --muted-glass: 240 20% 20% / 0.4;
+    /* Better Muted Elements */
+    --muted: 240 20% 10% / 0.9;
+    --muted-foreground: 240 15% 75%;
+    --muted-glass: 240 25% 18% / 0.5;
 
-    /* Dark Accent */
-    --accent: 280 100% 80% / 0.8;
-    --accent-foreground: 240 15% 8%;
-    --accent-glow: 280 100% 85% / 0.3;
+    /* Subtle Accent Colors */
+    --accent: 280 70% 72% / 0.7;
+    --accent-foreground: 240 18% 6%;
+    --accent-glow: 280 60% 75% / 0.4;
 
-    /* Dark Interactive States */
-    --hover: 248 100% 70% / 0.3;
-    --active: 248 100% 65% / 0.4;
+    /* Refined Interactive States */
+    --hover: 248 70% 65% / 0.25;
+    --active: 248 65% 60% / 0.35;
 
-    /* Dark Borders & Inputs */
-    --border: 240 20% 20% / 0.4;
-    --input: 240 20% 15% / 0.7;
-    --ring: 248 100% 75% / 0.5;
+    /* Enhanced Borders & Inputs */
+    --border: 240 25% 18% / 0.5;
+    --input: 240 25% 12% / 0.8;
+    --ring: 248 70% 68% / 0.6;
 
-    /* Dark Gradients */
-    --gradient-ethereal: linear-gradient(135deg, hsl(248 100% 60% / 0.4), hsl(280 100% 65% / 0.3));
-    --gradient-liquid: linear-gradient(180deg, hsl(240 20% 12% / 0.6), hsl(248 30% 10% / 0.3));
-    --gradient-hero: linear-gradient(135deg, hsl(248 100% 60% / 0.9), hsl(280 100% 65% / 0.7));
-    --gradient-card: linear-gradient(145deg, hsl(240 20% 15% / 0.6), hsl(248 20% 12% / 0.4));
+    /* Calmer Gradients */
+    --gradient-ethereal: linear-gradient(135deg, hsl(248 70% 55% / 0.3), hsl(280 65% 60% / 0.25));
+    --gradient-liquid: linear-gradient(180deg, hsl(240 25% 10% / 0.7), hsl(248 25% 8% / 0.4));
+    --gradient-hero: linear-gradient(135deg, hsl(248 70% 55% / 0.8), hsl(280 65% 60% / 0.6));
+    --gradient-card: linear-gradient(145deg, hsl(240 25% 12% / 0.7), hsl(248 22% 9% / 0.5));
 
-    /* Dark Shadows & Glows */
-    --shadow-glass: 0 8px 32px hsl(240 50% 5% / 0.4);
-    --shadow-ethereal: 0 15px 35px hsl(248 100% 50% / 0.3);
-    --shadow-liquid: 0 20px 40px hsl(240 50% 5% / 0.6);
-    --glow-primary: 0 0 30px hsl(248 100% 70% / 0.8);
-    --glow-accent: 0 0 25px hsl(280 100% 75% / 0.6);
+    /* Softer Shadows & Glows */
+    --shadow-glass: 0 8px 32px hsl(240 50% 4% / 0.5);
+    --shadow-ethereal: 0 15px 35px hsl(248 70% 45% / 0.25);
+    --shadow-liquid: 0 20px 40px hsl(240 50% 4% / 0.7);
+    --glow-primary: 0 0 25px hsl(248 70% 65% / 0.6);
+    --glow-accent: 0 0 20px hsl(280 60% 70% / 0.4);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
