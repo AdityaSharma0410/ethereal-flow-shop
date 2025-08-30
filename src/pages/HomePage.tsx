@@ -177,7 +177,7 @@ const HomePage: React.FC = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
           >
             {featuredProducts.map((product, index) => (
               <motion.div 
@@ -190,7 +190,7 @@ const HomePage: React.FC = () => {
                     <img
                       src={product.images[0]}
                       alt={product.name}
-                      className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+                      className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700"
                     />
                     {product.originalPrice && (
                       <Badge className="absolute top-4 left-4 bg-destructive">
@@ -198,13 +198,13 @@ const HomePage: React.FC = () => {
                       </Badge>
                     )}
                   </div>
-                  <CardContent className="p-6">
+                  <CardContent className="p-4">
                     <div className="flex items-center mb-2">
                       <div className="flex items-center">
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
-                            className={`w-4 h-4 ${
+                            className={`w-3 h-3 ${
                               i < Math.floor(product.rating)
                                 ? 'text-yellow-400 fill-current'
                                 : 'text-gray-300'
@@ -212,19 +212,19 @@ const HomePage: React.FC = () => {
                           />
                         ))}
                       </div>
-                      <span className="text-sm text-muted-foreground ml-2">
+                      <span className="text-xs text-muted-foreground ml-2">
                         ({product.reviewCount})
                       </span>
                     </div>
-                    <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+                    <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
                       {product.name}
                     </h3>
                     <p className="text-muted-foreground mb-4 line-clamp-2">
-                      {product.description}
+                      {product.description.substring(0, 80) + '...'}
                     </p>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
-                        <span className="text-2xl font-bold text-primary">
+                        <span className="text-xl font-bold text-primary">
                           ${product.price}
                         </span>
                         {product.originalPrice && (
@@ -234,7 +234,7 @@ const HomePage: React.FC = () => {
                         )}
                       </div>
                       <Link to={`/product/${product.id}`}>
-                        <Button className="btn-ethereal">
+                        <Button className="btn-ethereal text-sm px-3 py-2">
                           View Details
                         </Button>
                       </Link>
@@ -287,7 +287,7 @@ const HomePage: React.FC = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
           >
             {categories.map((category, index) => (
               <motion.div 
@@ -305,7 +305,7 @@ const HomePage: React.FC = () => {
                       />
                       <div className="absolute inset-0 bg-gradient-hero opacity-0 group-hover:opacity-20 transition-opacity" />
                     </div>
-                    <CardContent className="p-6">
+                    <CardContent className="p-4">
                       <h3 className="text-2xl font-bold mb-2 group-hover:text-primary transition-colors">
                         {category.name}
                       </h3>

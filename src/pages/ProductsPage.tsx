@@ -226,7 +226,7 @@ const ProductsPage: React.FC = () => {
         viewMode === 'list' ? 'flex' : ''
       }`}>
         <div className={`relative overflow-hidden ${
-          viewMode === 'list' ? 'w-48 flex-shrink-0' : 'h-64'
+          viewMode === 'list' ? 'w-48 flex-shrink-0' : 'h-48'
         }`}>
           <img
             src={product.images[0]}
@@ -245,13 +245,13 @@ const ProductsPage: React.FC = () => {
           )}
         </div>
         
-        <CardContent className={`p-6 flex flex-col ${viewMode === 'list' ? 'flex-1' : ''}`}>
+        <CardContent className={`p-4 flex flex-col ${viewMode === 'list' ? 'flex-1' : ''}`}>
           <div className="flex items-center mb-2">
             <div className="flex items-center">
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className={`w-4 h-4 ${
+                  className={`w-3 h-3 ${
                     i < Math.floor(product.rating)
                       ? 'text-yellow-400 fill-current'
                       : 'text-gray-300'
@@ -259,25 +259,25 @@ const ProductsPage: React.FC = () => {
                 />
               ))}
             </div>
-            <span className="text-sm text-muted-foreground ml-2">
+            <span className="text-xs text-muted-foreground ml-2">
               ({product.reviewCount})
             </span>
           </div>
           
-          <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+          <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
             {product.name}
           </h3>
           
           <p className="text-muted-foreground mb-4 flex-grow">
             {viewMode === 'list' 
               ? product.description 
-              : product.description.substring(0, 100) + '...'
+              : product.description.substring(0, 80) + '...'
             }
           </p>
           
           <div className="flex items-center justify-between mt-auto">
             <div className="flex items-center space-x-2">
-              <span className="text-2xl font-bold text-primary">
+              <span className="text-xl font-bold text-primary">
                 ${product.price}
               </span>
               {product.originalPrice && (
@@ -289,17 +289,17 @@ const ProductsPage: React.FC = () => {
             
             <div className="flex items-center space-x-2">
               <Link to={`/product/${product.id}`}>
-                <Button variant="outline" size="sm" className="btn-liquid">
+                <Button variant="outline" size="sm" className="btn-liquid text-xs px-2 py-1">
                   View
                 </Button>
               </Link>
               <Button 
                 size="sm" 
-                className="btn-ethereal"
+                className="btn-ethereal text-xs px-2 py-1"
                 onClick={() => handleAddToCart(product.id)}
                 disabled={!product.inStock}
               >
-                <ShoppingCart className="w-4 h-4" />
+                <ShoppingCart className="w-3 h-3" />
               </Button>
             </div>
           </div>
@@ -350,7 +350,7 @@ const ProductsPage: React.FC = () => {
             {/* Mobile Filter */}
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" className="btn-liquid lg:hidden">
+                <Button variant="outline" className="btn-liquid xl:hidden">
                   <SlidersHorizontal className="w-4 h-4 mr-2" />
                   Filters
                 </Button>
@@ -409,7 +409,7 @@ const ProductsPage: React.FC = () => {
 
         <div className="flex gap-8">
           {/* Sidebar Filters - Desktop */}
-          <div className="hidden lg:block w-64 flex-shrink-0">
+          <div className="hidden xl:block w-64 flex-shrink-0">
             <div className="glass-card p-6 sticky top-24">
               <h3 className="text-lg font-semibold mb-4">Filters</h3>
               <FilterPanel />
@@ -427,9 +427,9 @@ const ProductsPage: React.FC = () => {
                   whileInView="visible"
                   viewport={{ once: true }}
                   layout
-                  className={`grid gap-6 ${
+                  className={`grid gap-4 ${
                     viewMode === 'grid'
-                      ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3'
+                      ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
                       : 'grid-cols-1'
                   }`}
                 >

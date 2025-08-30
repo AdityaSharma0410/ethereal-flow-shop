@@ -90,11 +90,11 @@ const SignupPage: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="w-full max-w-md"
+        className="w-full max-w-sm"
       >
         <Card className="glass-card-strong shadow-ethereal">
-          <CardHeader className="text-center pb-2">
-            <CardTitle className="text-3xl font-bold text-ethereal mb-2">
+          <CardHeader className="text-center pb-2 px-6 pt-6">
+            <CardTitle className="text-2xl font-bold text-ethereal mb-2">
               Join Ethereal Cart
             </CardTitle>
             <p className="text-muted-foreground">
@@ -102,9 +102,9 @@ const SignupPage: React.FC = () => {
             </p>
           </CardHeader>
           
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-4 px-6 pb-6">
             {/* Signup Form */}
-            <form onSubmit={handleSignup} className="space-y-4">
+                          <form onSubmit={handleSignup} className="space-y-3">
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
                 <div className="relative">

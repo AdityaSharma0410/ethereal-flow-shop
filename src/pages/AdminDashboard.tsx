@@ -19,6 +19,8 @@ import {
   Bell,
   LifeBuoy,
   Settings,
+  Menu,
+  X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -59,15 +61,36 @@ const sections: { key: SectionKey; label: string; icon: React.ElementType }[] = 
 
 const AdminDashboard: React.FC = () => {
   const [active, setActive] = useState<SectionKey>('overview');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const ActiveIcon = useMemo(() => sections.find(s => s.key === active)?.icon ?? LayoutDashboard, [active]);
 
   return (
     <div className="container mx-auto px-4 pt-28 pb-10">{/* account for fixed navbar */}
-      <div className="grid grid-cols-12 gap-4">
+      {/* Mobile Menu Button */}
+      <div className="lg:hidden mb-4">
+        <Button 
+          variant="outline" 
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          className="btn-liquid"
+        >
+          {sidebarOpen ? <X className="w-4 h-4 mr-2" /> : <Menu className="w-4 h-4 mr-2" />}
+          {sidebarOpen ? 'Close Menu' : 'Open Menu'}
+        </Button>
+      </div>
+
+      {/* Mobile Backdrop */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      <div className="flex gap-6">
         {/* Sidebar */}
-        <aside className="col-span-12 lg:col-span-3">
-          <Card className="glass-card-strong border-glass-border">
+        <aside className={`${sidebarOpen ? 'fixed left-4 top-28 z-50' : 'hidden'} lg:relative lg:block w-64 flex-shrink-0 lg:flex-shrink-0`}>
+          <Card className="glass-card-strong border-glass-border lg:sticky lg:top-28">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
                 <Settings className="w-5 h-5" /> Admin Dashboard
@@ -75,14 +98,17 @@ const AdminDashboard: React.FC = () => {
               <CardDescription>Control panel for managing your store</CardDescription>
             </CardHeader>
             <CardContent>
-              <ScrollArea className="h-[60vh] pr-2">
+              <ScrollArea className="h-[calc(100vh-200px)] pr-2">
                 <div className="space-y-1">
                   {sections.map(({ key, label, icon: Icon }) => (
                     <Button
                       key={key}
                       variant={active === key ? 'default' : 'ghost'}
                       className={`w-full justify-start ${active === key ? 'btn-ethereal' : ''}`}
-                      onClick={() => setActive(key)}
+                      onClick={() => {
+                        setActive(key);
+                        setSidebarOpen(false); // Close mobile menu when section is selected
+                      }}
                     >
                       <Icon className="w-4 h-4 mr-2" /> {label}
                     </Button>
@@ -94,7 +120,7 @@ const AdminDashboard: React.FC = () => {
         </aside>
 
         {/* Main content */}
-        <main className="col-span-12 lg:col-span-9 space-y-4">
+        <main className="flex-1 space-y-4 min-w-0">
           <Header active={active} Icon={ActiveIcon} />
 
           {active === 'overview' && <OverviewSection />}
