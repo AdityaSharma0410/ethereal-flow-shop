@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import HomePage from "@/pages/HomePage";
 import ProductsPage from "@/pages/ProductsPage";
+import ProductViewPage from "@/pages/ProductViewPage";
 import CartPage from "@/pages/CartPage";
 import LoginPage from "@/pages/LoginPage";
 import SignupPage from "@/pages/SignupPage";
@@ -244,6 +245,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/products" element={<ProductsPage />} />
+              <Route path="/product/:id" element={<ProductViewPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />

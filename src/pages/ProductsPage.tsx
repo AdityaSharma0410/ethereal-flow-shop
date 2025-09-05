@@ -9,7 +9,15 @@ import {
   ShoppingCart,
   SlidersHorizontal,
   Search,
-  X
+  X,
+  Heart,
+  Eye,
+  Plus,
+  Minus,
+  TrendingUp,
+  Clock,
+  Package,
+  Award
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -32,10 +40,20 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { MockAPI } from '@/services/api';
 import { Product, Category } from '@/types/product';
 import { useAnimatedList } from '@/hooks/use-scroll-animation';
 import toast from 'react-hot-toast';
+import QuickViewModal from '@/components/QuickViewModal';
+import MiniCart from '@/components/MiniCart';
 
 const ProductsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -51,6 +69,13 @@ const ProductsPage: React.FC = () => {
   const [priceRange, setPriceRange] = useState([0, 500]);
   const [inStockOnly, setInStockOnly] = useState(false);
   const [sortBy, setSortBy] = useState('featured');
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
+  const [selectedRating, setSelectedRating] = useState(0);
+  const [wishlist, setWishlist] = useState<string[]>([]);
+  const [recentlyViewed, setRecentlyViewed] = useState<Product[]>([]);
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [miniCartVisible, setMiniCartVisible] = useState(false);
+  const [cartItems, setCartItems] = useState<{ product: Product; quantity: number }[]>([]);
 
   useEffect(() => {
     loadCategories();
@@ -111,9 +136,29 @@ const ProductsPage: React.FC = () => {
     }
   };
 
-  const handleAddToCart = async (productId: string) => {
+  const handleAddToCart = async (productId: string, quantity: number = 1) => {
     try {
-      await MockAPI.addToCart(productId, 1);
+      const product = products.find(p => p.id === productId);
+      if (!product) return;
+
+      await MockAPI.addToCart(productId, quantity);
+      
+      // Update local cart state
+      const existingItem = cartItems.find(item => item.product.id === productId);
+      if (existingItem) {
+        setCartItems(prev => prev.map(item => 
+          item.product.id === productId 
+            ? { ...item, quantity: item.quantity + quantity }
+            : item
+        ));
+      } else {
+        setCartItems(prev => [...prev, { product, quantity }]);
+      }
+
+      // Show mini cart
+      setMiniCartVisible(true);
+      setTimeout(() => setMiniCartVisible(false), 3000);
+
       toast.success('Added to cart!', {
         icon: '🛒',
         style: {
@@ -126,6 +171,49 @@ const ProductsPage: React.FC = () => {
     } catch (error) {
       toast.error('Failed to add to cart');
     }
+  };
+
+  const handleWishlistToggle = (productId: string) => {
+    setWishlist(prev => 
+      prev.includes(productId) 
+        ? prev.filter(id => id !== productId)
+        : [...prev, productId]
+    );
+    
+    const isAdding = !wishlist.includes(productId);
+    toast.success(isAdding ? 'Added to wishlist!' : 'Removed from wishlist!', {
+      icon: isAdding ? '❤️' : '💔',
+      style: {
+        background: 'var(--glass)',
+        color: 'var(--foreground)',
+        border: '1px solid var(--glass-border)',
+        backdropFilter: 'blur(16px)',
+      },
+    });
+  };
+
+  const handleProductView = (product: Product) => {
+    // Add to recently viewed
+    setRecentlyViewed(prev => {
+      const filtered = prev.filter(p => p.id !== product.id);
+      return [product, ...filtered].slice(0, 5);
+    });
+  };
+
+  const getProductBadge = (product: Product) => {
+    if (product.featured && product.rating >= 4.8) return { text: 'Best Seller', variant: 'default' as const };
+    if (product.reviewCount > 2000) return { text: 'Trending', variant: 'secondary' as const };
+    if (!product.inStock) return { text: 'Out of Stock', variant: 'destructive' as const };
+    if (product.originalPrice && product.originalPrice > product.price) {
+      const discount = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+      if (discount >= 30) return { text: 'Limited Stock', variant: 'outline' as const };
+    }
+    return null;
+  };
+
+  const getBrands = () => {
+    const brands = new Set(products.map(p => p.name.split(' ')[0]));
+    return Array.from(brands);
   };
 
   const handleFilterChange = () => {
@@ -194,6 +282,47 @@ const ProductsPage: React.FC = () => {
         />
       </div>
 
+      {/* Rating Filter */}
+      <div>
+        <label className="block text-sm font-medium mb-2">Minimum Rating</label>
+        <Select value={selectedRating.toString()} onValueChange={(value) => setSelectedRating(Number(value))}>
+          <SelectTrigger className="glass-card border-glass-border">
+            <SelectValue placeholder="All Ratings" />
+          </SelectTrigger>
+          <SelectContent className="glass-card-strong border-glass-border">
+            <SelectItem value="0">All Ratings</SelectItem>
+            <SelectItem value="4">4+ Stars</SelectItem>
+            <SelectItem value="4.5">4.5+ Stars</SelectItem>
+            <SelectItem value="4.8">4.8+ Stars</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Brand Filter */}
+      <div>
+        <label className="block text-sm font-medium mb-2">Brands</label>
+        <div className="space-y-2 max-h-32 overflow-y-auto">
+          {getBrands().map((brand) => (
+            <div key={brand} className="flex items-center space-x-2">
+              <Checkbox
+                id={`brand-${brand}`}
+                checked={selectedBrands.includes(brand)}
+                onCheckedChange={(checked) => {
+                  if (checked) {
+                    setSelectedBrands(prev => [...prev, brand]);
+                  } else {
+                    setSelectedBrands(prev => prev.filter(b => b !== brand));
+                  }
+                }}
+              />
+              <label htmlFor={`brand-${brand}`} className="text-sm">
+                {brand}
+              </label>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* In Stock Only */}
       <div className="flex items-center space-x-2">
         <Checkbox
@@ -214,36 +343,75 @@ const ProductsPage: React.FC = () => {
     </div>
   );
 
-  const ProductCard = ({ product }: { product: Product }) => (
-    <motion.div
-      layout
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ duration: 0.3 }}
-    >
-      <Card className={`glass-card hover:shadow-ethereal transition-all duration-500 group h-full ${
-        viewMode === 'list' ? 'flex' : ''
-      }`}>
-        <div className={`relative overflow-hidden ${
-          viewMode === 'list' ? 'w-48 flex-shrink-0' : 'h-48'
+  const ProductCard = ({ product }: { product: Product }) => {
+    const badge = getProductBadge(product);
+    const isWishlisted = wishlist.includes(product.id);
+
+    return (
+      <motion.div
+        layout
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
+        transition={{ duration: 0.3 }}
+      >
+        <Card className={`glass-card hover:shadow-ethereal transition-all duration-500 group h-full ${
+          viewMode === 'list' ? 'flex' : ''
         }`}>
-          <img
-            src={product.images[0]}
-            alt={product.name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-          />
-          {product.originalPrice && (
-            <Badge className="absolute top-4 left-4 bg-destructive">
-              {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
-            </Badge>
-          )}
-          {!product.inStock && (
-            <Badge className="absolute top-4 right-4 bg-gray-500">
-              Out of Stock
-            </Badge>
-          )}
-        </div>
+          <div className={`relative overflow-hidden ${
+            viewMode === 'list' ? 'w-48 flex-shrink-0' : 'h-48'
+          }`}>
+            <img
+              src={product.images[0]}
+              alt={product.name}
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+            
+            {/* Badges */}
+            <div className="absolute top-4 left-4 flex flex-col gap-2">
+              {product.originalPrice && (
+                <Badge className="bg-destructive">
+                  {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+                </Badge>
+              )}
+              {badge && (
+                <Badge variant={badge.variant} className="flex items-center gap-1">
+                  {badge.text === 'Best Seller' && <Award className="w-3 h-3" />}
+                  {badge.text === 'Trending' && <TrendingUp className="w-3 h-3" />}
+                  {badge.text === 'Limited Stock' && <Clock className="w-3 h-3" />}
+                  {badge.text === 'Out of Stock' && <Package className="w-3 h-3" />}
+                  {badge.text}
+                </Badge>
+              )}
+            </div>
+
+            {/* Wishlist & Quick View */}
+            <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <Button
+                size="sm"
+                variant="outline"
+                className={`btn-liquid p-2 ${isWishlisted ? 'text-red-500 border-red-500' : ''}`}
+                onClick={() => handleWishlistToggle(product.id)}
+              >
+                <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-current' : ''}`} />
+              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="btn-liquid p-2"
+                    onClick={() => setQuickViewProduct(product)}
+                  >
+                    <Eye className="w-4 h-4" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="glass-card-strong border-glass-border max-w-2xl">
+                  <QuickViewModal product={product} onAddToCart={handleAddToCart} />
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
         
         <CardContent className={`p-4 flex flex-col ${viewMode === 'list' ? 'flex-1' : ''}`}>
           <div className="flex items-center mb-2">
@@ -288,9 +456,9 @@ const ProductsPage: React.FC = () => {
             </div>
             
             <div className="flex items-center space-x-2">
-              <Link to={`/product/${product.id}`}>
+              <Link to={`/product/${product.id}`} onClick={() => handleProductView(product)}>
                 <Button variant="outline" size="sm" className="btn-liquid text-xs px-2 py-1">
-                  View
+                  View Details
                 </Button>
               </Link>
               <Button 
@@ -306,7 +474,8 @@ const ProductsPage: React.FC = () => {
         </CardContent>
       </Card>
     </motion.div>
-  );
+    );
+  };
 
   if (loading) {
     return (
@@ -402,6 +571,7 @@ const ProductsPage: React.FC = () => {
                 <SelectItem value="price-low">Price: Low to High</SelectItem>
                 <SelectItem value="price-high">Price: High to Low</SelectItem>
                 <SelectItem value="rating">Highest Rated</SelectItem>
+                <SelectItem value="best-selling">Best Selling</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -462,7 +632,48 @@ const ProductsPage: React.FC = () => {
             </AnimatePresence>
           </div>
         </div>
+
+        {/* Recently Viewed Products */}
+        {recentlyViewed.length > 0 && (
+          <div className="mt-16">
+            <h2 className="text-2xl font-bold mb-8 text-ethereal">Recently Viewed</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {recentlyViewed.map((product) => (
+                <motion.div
+                  key={product.id}
+                  whileHover={{ y: -5 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Link to={`/product/${product.id}`}>
+                    <Card className="glass-card hover:shadow-ethereal transition-all duration-500 group">
+                      <div className="relative h-32 overflow-hidden rounded-t-lg">
+                        <img
+                          src={product.images[0]}
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                        />
+                      </div>
+                      <CardContent className="p-3">
+                        <h3 className="font-medium text-sm mb-1 truncate group-hover:text-primary transition-colors">
+                          {product.name}
+                        </h3>
+                        <span className="text-primary font-bold">${product.price}</span>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* Mini Cart */}
+      <MiniCart
+        isVisible={miniCartVisible}
+        onClose={() => setMiniCartVisible(false)}
+        items={cartItems}
+      />
     </div>
   );
 };
