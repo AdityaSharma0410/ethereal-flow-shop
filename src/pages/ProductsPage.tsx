@@ -354,12 +354,13 @@ const ProductsPage: React.FC = () => {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
         transition={{ duration: 0.3 }}
+        className="h-full"
       >
         <Card className={`glass-card hover:shadow-ethereal transition-all duration-500 group h-full ${
-          viewMode === 'list' ? 'flex' : ''
+          viewMode === 'list' ? 'flex' : 'flex flex-col'
         }`}>
-          <div className={`relative overflow-hidden ${
-            viewMode === 'list' ? 'w-48 flex-shrink-0' : 'h-48'
+          <div className={`relative overflow-hidden flex-shrink-0 ${
+            viewMode === 'list' ? 'w-48' : 'h-48'
           }`}>
             <img
               src={product.images[0]}
@@ -368,7 +369,7 @@ const ProductsPage: React.FC = () => {
             />
             
             {/* Badges */}
-            <div className="absolute top-4 left-4 flex flex-col gap-2">
+            <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
               {product.originalPrice && (
                 <Badge className="bg-destructive">
                   {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
@@ -386,7 +387,7 @@ const ProductsPage: React.FC = () => {
             </div>
 
             {/* Wishlist & Quick View */}
-            <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
               <Button
                 size="sm"
                 variant="outline"
@@ -412,68 +413,73 @@ const ProductsPage: React.FC = () => {
               </Dialog>
             </div>
           </div>
-        
-        <CardContent className={`p-4 flex flex-col ${viewMode === 'list' ? 'flex-1' : ''}`}>
-          <div className="flex items-center mb-2">
-            <div className="flex items-center">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-3 h-3 ${
-                    i < Math.floor(product.rating)
-                      ? 'text-yellow-400 fill-current'
-                      : 'text-gray-300'
-                  }`}
-                />
-              ))}
-            </div>
-            <span className="text-xs text-muted-foreground ml-2">
-              ({product.reviewCount})
-            </span>
-          </div>
           
-          <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors">
-            {product.name}
-          </h3>
-          
-          <p className="text-muted-foreground mb-4 flex-grow">
-            {viewMode === 'list' 
-              ? product.description 
-              : product.description.substring(0, 80) + '...'
-            }
-          </p>
-          
-          <div className="flex items-center justify-between mt-auto">
-            <div className="flex items-center space-x-2">
-              <span className="text-xl font-bold text-primary">
-                ${product.price}
-              </span>
-              {product.originalPrice && (
-                <span className="text-lg text-muted-foreground line-through">
-                  ${product.originalPrice}
+          <CardContent className={`p-4 flex flex-col justify-between ${viewMode === 'list' ? 'flex-1' : 'flex-1'}`}>
+            <div className="flex-1">
+              <div className="flex items-center mb-2">
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-3 h-3 ${
+                        i < Math.floor(product.rating)
+                          ? 'text-yellow-400 fill-current'
+                          : 'text-gray-300'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-xs text-muted-foreground ml-2">
+                  ({product.reviewCount})
                 </span>
-              )}
+              </div>
+              
+              <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                {product.name}
+              </h3>
+              
+              <p className="text-muted-foreground mb-4 line-clamp-3">
+                {viewMode === 'list' 
+                  ? product.description 
+                  : product.description.substring(0, 80) + '...'
+                }
+              </p>
             </div>
             
-            <div className="flex items-center space-x-2">
-              <Link to={`/product/${product.id}`} onClick={() => handleProductView(product)}>
-                <Button variant="outline" size="sm" className="btn-liquid text-xs px-2 py-1">
-                  View Details
-                </Button>
-              </Link>
-              <Button 
-                size="sm" 
-                className="btn-ethereal text-xs px-2 py-1"
-                onClick={() => handleAddToCart(product.id)}
-                disabled={!product.inStock}
-              >
-                <ShoppingCart className="w-3 h-3" />
-              </Button>
+            {/* Price and Actions - Always at bottom */}
+            <div className="mt-auto">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <span className="text-xl font-bold text-primary">
+                    ${product.price}
+                  </span>
+                  {product.originalPrice && (
+                    <span className="text-lg text-muted-foreground line-through">
+                      ${product.originalPrice}
+                    </span>
+                  )}
+                </div>
+                
+                <div className="flex items-center space-x-2 flex-shrink-0">
+                  <Link to={`/product/${product.id}`} onClick={() => handleProductView(product)}>
+                    <Button variant="outline" size="sm" className="btn-liquid text-xs px-2 py-1">
+                      View Details
+                    </Button>
+                  </Link>
+                  <Button 
+                    size="sm" 
+                    className="btn-ethereal text-xs px-2 py-1"
+                    onClick={() => handleAddToCart(product.id)}
+                    disabled={!product.inStock}
+                  >
+                    <ShoppingCart className="w-3 h-3" />
+                  </Button>
+                </div>
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-    </motion.div>
+          </CardContent>
+        </Card>
+      </motion.div>
     );
   };
 
