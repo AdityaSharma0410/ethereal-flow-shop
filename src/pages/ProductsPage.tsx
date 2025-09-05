@@ -356,11 +356,11 @@ const ProductsPage: React.FC = () => {
         transition={{ duration: 0.3 }}
         className="h-full"
       >
-        <Card className={`glass-card hover:shadow-ethereal transition-all duration-500 group h-full ${
+        <Card className={`glass-card hover:shadow-ethereal transition-all duration-500 group h-full overflow-hidden ${
           viewMode === 'list' ? 'flex' : 'flex flex-col'
         }`}>
           <div className={`relative overflow-hidden flex-shrink-0 ${
-            viewMode === 'list' ? 'w-48' : 'h-48'
+            viewMode === 'list' ? 'w-48' : 'h-64'
           }`}>
             <img
               src={product.images[0]}
@@ -446,36 +446,34 @@ const ProductsPage: React.FC = () => {
               </p>
             </div>
             
-            {/* Price and Actions - Always at bottom */}
-            <div className="mt-auto">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <span className="text-xl font-bold text-primary">
-                    ${product.price}
+            {/* Price and Actions - Each on its own line */}
+            <div className="mt-auto space-y-3">
+              <div className="flex items-center space-x-2">
+                <span className="text-xl font-bold text-primary">
+                  ${product.price}
+                </span>
+                {product.originalPrice && (
+                  <span className="text-lg text-muted-foreground line-through">
+                    ${product.originalPrice}
                   </span>
-                  {product.originalPrice && (
-                    <span className="text-lg text-muted-foreground line-through">
-                      ${product.originalPrice}
-                    </span>
-                  )}
-                </div>
-                
-                <div className="flex items-center space-x-2 flex-shrink-0">
-                  <Link to={`/product/${product.id}`} onClick={() => handleProductView(product)}>
-                    <Button variant="outline" size="sm" className="btn-liquid text-xs px-2 py-1">
-                      View Details
-                    </Button>
-                  </Link>
-                  <Button 
-                    size="sm" 
-                    className="btn-ethereal text-xs px-2 py-1"
-                    onClick={() => handleAddToCart(product.id)}
-                    disabled={!product.inStock}
-                  >
-                    <ShoppingCart className="w-3 h-3" />
-                  </Button>
-                </div>
+                )}
               </div>
+
+              <Link to={`/product/${product.id}`} onClick={() => handleProductView(product)}>
+                <Button variant="outline" size="sm" className="btn-liquid w-full">
+                  View Details
+                </Button>
+              </Link>
+
+              <Button 
+                size="sm" 
+                className="btn-ethereal w-full"
+                onClick={() => handleAddToCart(product.id)}
+                disabled={!product.inStock}
+              >
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                Add to cart
+              </Button>
             </div>
           </CardContent>
         </Card>
@@ -603,9 +601,9 @@ const ProductsPage: React.FC = () => {
                   whileInView="visible"
                   viewport={{ once: true }}
                   layout
-                  className={`grid gap-4 ${
+                  className={`grid gap-6 ${
                     viewMode === 'grid'
-                      ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+                      ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
                       : 'grid-cols-1'
                   }`}
                 >
