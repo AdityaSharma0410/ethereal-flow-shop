@@ -119,11 +119,9 @@ const ProductsPage: React.FC = () => {
           productsData.sort((a, b) => b.rating - a.rating);
           break;
         case 'newest':
-          // Assuming newer products have higher IDs
           productsData.sort((a, b) => parseInt(b.id) - parseInt(a.id));
           break;
         default:
-          // Featured products first
           productsData.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
       }
 
@@ -143,7 +141,6 @@ const ProductsPage: React.FC = () => {
 
       await MockAPI.addToCart(productId, quantity);
       
-      // Update local cart state
       const existingItem = cartItems.find(item => item.product.id === productId);
       if (existingItem) {
         setCartItems(prev => prev.map(item => 
@@ -155,7 +152,6 @@ const ProductsPage: React.FC = () => {
         setCartItems(prev => [...prev, { product, quantity }]);
       }
 
-      // Show mini cart
       setMiniCartVisible(true);
       setTimeout(() => setMiniCartVisible(false), 3000);
 
@@ -193,7 +189,6 @@ const ProductsPage: React.FC = () => {
   };
 
   const handleProductView = (product: Product) => {
-    // Add to recently viewed
     setRecentlyViewed(prev => {
       const filtered = prev.filter(p => p.id !== product.id);
       return [product, ...filtered].slice(0, 5);
@@ -348,35 +343,22 @@ const ProductsPage: React.FC = () => {
     const isWishlisted = wishlist.includes(product.id);
 
     return (
-      <motion.div
-        layout
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-        transition={{ duration: 0.3 }}
-        className="h-full"
-      >
+      <motion.div layout initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.3 }} className="h-full">
         <Card className={`glass-card hover:shadow-ethereal transition-all duration-500 group h-full overflow-hidden ${
-          viewMode === 'list' ? 'flex' : 'flex flex-col'
+          viewMode === 'list' ? 'flex-col md:flex-row' : 'flex flex-col'
         }`}>
           <div className={`relative overflow-hidden flex-shrink-0 ${
-            viewMode === 'list' ? 'w-48' : 'h-64'
+            viewMode === 'list' ? 'w-full aspect-square md:w-56 md:aspect-[4/5]' : 'aspect-square md:aspect-[4/5]'
           }`}>
-            <img
-              src={product.images[0]}
-              alt={product.name}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-            />
-            
-            {/* Badges */}
-            <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
+            <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+            <div className="absolute top-3 md:top-4 left-3 md:left-4 flex flex-col gap-2 z-10">
               {product.originalPrice && (
-                <Badge className="bg-destructive">
+                <Badge className="bg-destructive text-xs md:text-sm">
                   {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
                 </Badge>
               )}
               {badge && (
-                <Badge variant={badge.variant} className="flex items-center gap-1">
+                <Badge variant={badge.variant} className="flex items-center gap-1 text-xs md:text-sm">
                   {badge.text === 'Best Seller' && <Award className="w-3 h-3" />}
                   {badge.text === 'Trending' && <TrendingUp className="w-3 h-3" />}
                   {badge.text === 'Limited Stock' && <Clock className="w-3 h-3" />}
@@ -385,25 +367,14 @@ const ProductsPage: React.FC = () => {
                 </Badge>
               )}
             </div>
-
-            {/* Wishlist & Quick View */}
-            <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-              <Button
-                size="sm"
-                variant="outline"
-                className={`btn-liquid p-2 ${isWishlisted ? 'text-red-500 border-red-500' : ''}`}
-                onClick={() => handleWishlistToggle(product.id)}
-              >
+            {/* Hide floating quick actions on mobile list to avoid overlap */}
+            <div className={`${viewMode === 'list' ? 'hidden md:flex' : 'flex'} absolute top-3 md:top-4 right-3 md:right-4 flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10`}>
+              <Button size="sm" variant="outline" className={`btn-liquid p-2 ${isWishlisted ? 'text-red-500 border-red-500' : ''}`} onClick={() => handleWishlistToggle(product.id)}>
                 <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-current' : ''}`} />
               </Button>
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="btn-liquid p-2"
-                    onClick={() => setQuickViewProduct(product)}
-                  >
+                  <Button size="sm" variant="outline" className="btn-liquid p-2" onClick={() => setQuickViewProduct(product)}>
                     <Eye className="w-4 h-4" />
                   </Button>
                 </DialogTrigger>
@@ -413,64 +384,31 @@ const ProductsPage: React.FC = () => {
               </Dialog>
             </div>
           </div>
-          
-          <CardContent className={`p-4 flex flex-col justify-between ${viewMode === 'list' ? 'flex-1' : 'flex-1'}`}>
+
+          <CardContent className="p-3 md:p-4 flex flex-col justify-between flex-1">
             <div className="flex-1">
               <div className="flex items-center mb-2">
                 <div className="flex items-center">
                   {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-3 h-3 ${
-                        i < Math.floor(product.rating)
-                          ? 'text-yellow-400 fill-current'
-                          : 'text-gray-300'
-                      }`}
-                    />
+                    <Star key={i} className={`w-3 h-3 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} />
                   ))}
                 </div>
-                <span className="text-xs text-muted-foreground ml-2">
-                  ({product.reviewCount})
-                </span>
+                <span className="text-xs text-muted-foreground ml-2">({product.reviewCount})</span>
               </div>
-              
-              <h3 className="text-lg font-semibold mb-2 group-hover:text-primary transition-colors line-clamp-2">
-                {product.name}
-              </h3>
-              
-              <p className="text-muted-foreground mb-4 line-clamp-3">
-                {viewMode === 'list' 
-                  ? product.description 
-                  : product.description.substring(0, 80) + '...'
-                }
-              </p>
+              <h3 className="text-base md:text-lg font-semibold mb-2 group-hover:text-primary transition-colors line-clamp-2">{product.name}</h3>
+              <p className="hidden md:block text-base text-muted-foreground mb-4 line-clamp-3">{product.description}</p>
             </div>
-            
-            {/* Price and Actions - Each on its own line */}
-            <div className="mt-auto space-y-3">
+            <div className="mt-auto space-y-2 md:space-y-3">
               <div className="flex items-center space-x-2">
-                <span className="text-xl font-bold text-primary">
-                  ${product.price}
-                </span>
+                <span className="text-lg md:text-xl font-bold text-primary">${product.price}</span>
                 {product.originalPrice && (
-                  <span className="text-lg text-muted-foreground line-through">
-                    ${product.originalPrice}
-                  </span>
+                  <span className="text-sm md:text-lg text-muted-foreground line-through">${product.originalPrice}</span>
                 )}
               </div>
-
               <Link to={`/product/${product.id}`} onClick={() => handleProductView(product)}>
-                <Button variant="outline" size="sm" className="btn-liquid w-full">
-                  View Details
-                </Button>
+                <Button variant="outline" size="sm" className="btn-liquid w-full text-xs md:text-sm">View Details</Button>
               </Link>
-
-              <Button 
-                size="sm" 
-                className="btn-ethereal w-full"
-                onClick={() => handleAddToCart(product.id)}
-                disabled={!product.inStock}
-              >
+              <Button size="sm" className="btn-ethereal w-full text-xs md:text-sm" onClick={() => handleAddToCart(product.id)} disabled={!product.inStock}>
                 <ShoppingCart className="w-4 h-4 mr-2" />
                 Add to cart
               </Button>
@@ -498,26 +436,12 @@ const ProductsPage: React.FC = () => {
   return (
     <div className="min-h-screen pt-24 px-4">
       <div className="container mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-8"
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
           <h1 className="text-4xl font-bold mb-4 text-ethereal">
-            {selectedCategory && selectedCategory !== 'all'
-              ? `${categories.find(c => c.slug === selectedCategory)?.name || 'Category'} Products`
-              : searchQuery 
-                ? `Search Results for "${searchQuery}"`
-                : 'All Products'
-            }
+            {selectedCategory && selectedCategory !== 'all' ? `${categories.find(c => c.slug === selectedCategory)?.name || 'Category'} Products` : searchQuery ? `Search Results for "${searchQuery}"` : 'All Products'}
           </h1>
-          <p className="text-muted-foreground">
-            Discover {products.length} ethereal treasures waiting for you
-          </p>
+          <p className="text-muted-foreground">Discover {products.length} ethereal treasures waiting for you</p>
         </motion.div>
-
-        {/* Controls */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div className="flex items-center space-x-4">
             {/* Mobile Filter */}
@@ -594,43 +518,18 @@ const ProductsPage: React.FC = () => {
           <div className="flex-1">
             <AnimatePresence mode="popLayout">
               {products.length > 0 ? (
-                <motion.div
-                  ref={animatedList.containerRef}
-                  variants={animatedList.containerVariants}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  layout
-                  className={`grid gap-6 ${
-                    viewMode === 'grid'
-                      ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-                      : 'grid-cols-1'
-                  }`}
-                >
+                <motion.div ref={animatedList.containerRef} variants={animatedList.containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true }} layout className={`grid gap-3 md:gap-6 ${viewMode === 'grid' ? 'grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4' : 'grid-cols-1'}`}>
                   {products.map((product) => (
-                    <motion.div
-                      key={product.id}
-                      variants={animatedList.itemVariants}
-                      whileHover="hover"
-                      layout
-                    >
+                    <motion.div key={product.id} variants={animatedList.itemVariants} whileHover="hover" layout>
                       <ProductCard product={product} />
                     </motion.div>
                   ))}
                 </motion.div>
               ) : (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-center py-20"
-                >
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center py-20">
                   <h3 className="text-2xl font-semibold mb-4">No products found</h3>
-                  <p className="text-muted-foreground mb-8">
-                    Try adjusting your filters or search terms
-                  </p>
-                  <Button onClick={clearFilters} className="btn-ethereal">
-                    Clear All Filters
-                  </Button>
+                  <p className="text-muted-foreground mb-8">Try adjusting your filters or search terms</p>
+                  <Button onClick={() => clearFilters()} className="btn-ethereal">Clear All Filters</Button>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -671,13 +570,7 @@ const ProductsPage: React.FC = () => {
           </div>
         )}
       </div>
-
-      {/* Mini Cart */}
-      <MiniCart
-        isVisible={miniCartVisible}
-        onClose={() => setMiniCartVisible(false)}
-        items={cartItems}
-      />
+      <MiniCart isVisible={miniCartVisible} onClose={() => setMiniCartVisible(false)} items={cartItems} />
     </div>
   );
 };
